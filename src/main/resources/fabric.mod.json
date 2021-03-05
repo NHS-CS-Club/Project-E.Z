@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "projectez",
   "version": "${version}",
 
-  "name": "Example Mod",
+  "name": "Project E.Z",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
     "Me!"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/SciDev5/FABRICMC-CS_Club_Mod"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/projectez/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.fabricmc.projectez.Main"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "projectez.mixins.json"
   ],
 
   "depends": {
