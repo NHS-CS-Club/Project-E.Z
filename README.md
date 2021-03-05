@@ -17,3 +17,5 @@ It is basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Cli
 - Shulker Box Peaker
 - Block Light color (to light up big areas)
 - (More things in the future!)
+- Motion Blur? (Maby)
+- Onscreen Coordinates and Location? (No F3) (Maby)
