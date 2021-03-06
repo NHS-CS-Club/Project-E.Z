@@ -6,7 +6,7 @@
   "name": "Project E.Z",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "Theo and Joey"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -23,7 +23,7 @@
     ]
   },
   "mixins": [
-    "projectez.mixins.json"
+    "projectez.mixins.json", "potions_hud_fabric.mixins.json"
   ],
 
   "depends": {
@@ -33,5 +33,8 @@
   },
   "suggests": {
     "another-mod": "*"
+  },
+  "custom": {
+    "modmenu:clientsideOnly": true
   }
 }
