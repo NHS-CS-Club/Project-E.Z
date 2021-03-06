@@ -10,7 +10,7 @@ This template is available under the CC0 license. Feel free to learn from it and
 
 ## **What is Project E.Z?**
 
-It is basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Client. The following features are being worked on and will soon be added into the files:
+Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Client. The following features are being worked on and will soon be added into the files:
 - Optifine Zoom
 - Potion Status HUD
 - Armor Status HUD
