@@ -3,7 +3,7 @@ package net.fabricmc.projectez;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.projectez.mixin.MinecraftClientMixin;
+import net.fabricmc.projectez.mixin.MinecraftClientAccessorMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -40,11 +40,12 @@ public class HUD {
         final TextRenderer textRenderer = client.textRenderer;
         final MatrixStack matrixStack = new MatrixStack();
 
+
         if (player == null) return;
 
         Collection<StatusEffectInstance> statusEffects = player.getStatusEffects();
 
-        final GameOptions gameOptions = ((MinecraftClientMixin) MinecraftClient.getInstance()).getGameOptions();
+        final GameOptions gameOptions = ((MinecraftClientAccessorMixin) MinecraftClient.getInstance()).getGameOptions();
 
         if (!statusEffects.isEmpty() && !gameOptions.debugEnabled) {
             RenderSystem.enableBlend();
