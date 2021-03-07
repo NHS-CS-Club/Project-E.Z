@@ -63,14 +63,12 @@ public class PotionHUDMod extends Mod {
             for (StatusEffectInstance statusEffectInstance : Ordering.natural().reverse().sortedCopy(statusEffects)) {
                 StatusEffect statusEffect = statusEffectInstance.getEffectType();
 
-                final int duration = statusEffectInstance.getDuration() / 20;
-                final long mins = TimeUnit.SECONDS.toMinutes(duration);
-                final long secs = duration - TimeUnit.MINUTES.toSeconds(mins);
-
-                String formattedDuration;
-                if (statusEffectInstance.isPermanent()) formattedDuration = "∞";
-                else if (mins == 0) formattedDuration = secs + " sec";
-                else formattedDuration = String.format("%d min, %d sec", mins, secs);
+                double durationInSeconds = statusEffectInstance.getDuration() / 20.0;
+                String formattedPotionInfo = getPotionInfoText(
+                        statusEffectInstance.getAmplifier(),
+                        durationInSeconds,
+                        statusEffectInstance.isPermanent()
+                );
 
                 final int x = 3;
                 final int y = spriteSize * statusEffectsRunnables.size() + 3;
@@ -82,19 +80,24 @@ public class PotionHUDMod extends Mod {
                     DrawableHelper.drawSprite(matrixStack, x, y, inGameHud.getZOffset(), 18, 18, sprite);
                     final float textYOffset = spriteSize / 2f - textRenderer.fontHeight / 2.5f;
                     int color;
-                    if (duration <= 5)
-                        color = 0xFF5555;
-                    else if (duration <= 15)
-                        color = 0xFFAA00;
-                    else if (duration <= 25)
-                        color = 0xFFFF55;
-                    else color = 0xFFFFFF;
-                    textRenderer.draw(matrixStack, formattedDuration, x + spriteSize + 3, y + textYOffset, color);
+                    if (durationInSeconds <= 5)       color = 0xFF5555;
+                    else if (durationInSeconds <= 15) color = 0xFFAA00;
+                    else if (durationInSeconds <= 25) color = 0xFFFF55;
+                    else                              color = 0xFFFFFF;
+                    textRenderer.draw(matrixStack, formattedPotionInfo, x + spriteSize + 3, y + textYOffset, color);
                 });
             }
 
             statusEffectsRunnables.forEach(Runnable::run);
         }
+    }
+
+    private String getPotionInfoText(int strength, double durationInSeconds, boolean isPermanent) {
+        final long minutes = TimeUnit.SECONDS.toMinutes((long)durationInSeconds);
+        final long seconds = (long)durationInSeconds - TimeUnit.MINUTES.toSeconds(minutes);
+
+        if (isPermanent) return String.format("[LV %d] PERMANENT",strength+1);
+        return String.format("[LV %3$d] "+(minutes>0?"%1$d min, ":"")+"%2$d sec", minutes, seconds, strength+1);
     }
 
     @Override protected void onEnable() { }
