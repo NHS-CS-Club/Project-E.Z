@@ -1,12 +1,13 @@
-package net.fabricmc.projectez;
+package net.fabricmc.projectez.mods;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.fabricmc.projectez.event.EventHandler;
+import net.fabricmc.projectez.event.render.PotionEffectRenderEvent;
 import net.fabricmc.projectez.mixin.MinecraftClientAccessorMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -24,17 +25,21 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Environment(EnvType.CLIENT)
-public class HUD {
-    private MinecraftClient client;
+public class PotionHUDMod extends Mod {
+    private final MinecraftClient client;
 
-    public HUD() {
+    public PotionHUDMod() {
+        super("Potion Effects HUD");
         client = MinecraftClient.getInstance();
-        HudRenderCallback.EVENT.register((__, ___) -> {
+        /*HudRenderCallback.EVENT.register((__, ___) -> {
             this.render();
-        });
+        });*/
     }
 
-    private void render() {
+    @EventHandler
+    public void render(PotionEffectRenderEvent e) {
+        e.cancel();
+
         final PlayerEntity player = client.player;
         final InGameHud inGameHud = client.inGameHud;
         final TextRenderer textRenderer = client.textRenderer;
@@ -91,4 +96,9 @@ public class HUD {
             statusEffectsRunnables.forEach(Runnable::run);
         }
     }
+
+    @Override protected void onEnable() { }
+    @Override protected void onDisable() { }
+    @Override protected void onInit() { }
+    @Override protected void onCleanup() { }
 }

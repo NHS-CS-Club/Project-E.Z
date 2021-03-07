@@ -6,8 +6,11 @@
   "mixins": [
   ],
   "client": [
-    "LightmapMixin",
-    "LightmapAccessorMixin"
+    "GameRendererMixin",
+    "InGameHudMixin",
+    "LightmapTextureAccessorMixin",
+    "MinecraftClientAccessorMixin",
+    "InGameHudAccessorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,7 +6,8 @@
   "name": "Project E.Z",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Theo and Joey"
+    "SciDev (Joey)",
+    "Maimunaki (Theo)"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -23,7 +24,7 @@
     ]
   },
   "mixins": [
-    "projectez.mixins.json", "potions_hud_fabric.mixins.json"
+    "projectez.mixins.json"
   ],
 
   "depends": {
