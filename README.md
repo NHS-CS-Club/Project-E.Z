@@ -18,10 +18,12 @@ Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Clien
 - Potion Status HUD (Done)
 - Armor Status HUD (TODO)
 - Shulker Box Peaker (TODO)
+- Auto Refill (TODO)
 - Block Light color (to light up big areas) (Done)
 - (More things in the future!)
 - Onscreen Coordinates and Location? (No F3) (Maby) (TODO)
 - Seed Cracker (Maby) (Not confirmed yet) (Idea)
+
 
 
 Credit to Samuel Martineau for smippets of some of the code.
