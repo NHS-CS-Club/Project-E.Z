@@ -14,6 +14,7 @@ This template is available under the CC0 license. Feel free to learn from it and
 
 Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Client. The following features are being worked on and will soon be added into the files:
 - Optifine Zoom (TODO)
+- Full Bright (TODO)
 - Potion Status HUD (Done)
 - Armor Status HUD (TODO)
 - Shulker Box Peaker (TODO)
