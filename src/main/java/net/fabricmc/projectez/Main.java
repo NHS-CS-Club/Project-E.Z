@@ -1,6 +1,7 @@
 package net.fabricmc.projectez;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.projectez.mixin.FullBrightMod;
 import net.fabricmc.projectez.mods.LightLevelDisplayMod;
 import net.fabricmc.projectez.mods.Mod;
 import net.fabricmc.projectez.mods.PotionHUDMod;
@@ -24,6 +25,7 @@ public class Main implements ModInitializer {
 
 		mods.add(new LightLevelDisplayMod());
 		mods.add(new PotionHUDMod());
+		mods.add(new FullBrightMod());
 
 		for (Mod mod : mods) mod.init();
 		for (Mod mod : mods) mod.setEnabled(true);
