@@ -1,7 +1,7 @@
 package net.fabricmc.projectez;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.projectez.mixin.FullBrightMod;
+import net.fabricmc.projectez.mods.FullBrightMod;
 import net.fabricmc.projectez.mods.LightLevelDisplayMod;
 import net.fabricmc.projectez.mods.Mod;
 import net.fabricmc.projectez.mods.PotionHUDMod;

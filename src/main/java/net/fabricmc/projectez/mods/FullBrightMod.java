@@ -1,4 +1,4 @@
-package net.fabricmc.projectez.mixin;
+package net.fabricmc.projectez.mods;
 
 import net.fabricmc.projectez.event.EventHandler;
 import net.fabricmc.projectez.event.render.LightmapUpdateEvent;
@@ -6,7 +6,7 @@ import net.fabricmc.projectez.mods.Mod;
 
 public class FullBrightMod extends Mod {
     public FullBrightMod() {
-        super("Fulbright");
+        super("FullBright");
     }
 
     @EventHandler()
