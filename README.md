@@ -14,7 +14,7 @@ This template is available under the CC0 license. Feel free to learn from it and
 
 Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Client. The following features are being worked on and will soon be added into the files:
 - Optifine Zoom (TODO)
-- Full Bright (TODO)
+- Full Bright (Done)
 - Potion Status HUD (Done)
 - Armor Status HUD (TODO)
 - Shulker Box Peaker (TODO)
@@ -23,6 +23,8 @@ Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Clien
 - (More things in the future!)
 - Onscreen Coordinates and Location? (No F3) (Maby) (TODO)
 - Seed Cracker (Maby) (Not confirmed yet) (Idea)
+
+- Toggalable Switch For Each Mod (TODO)
 
 
 
