@@ -25,8 +25,4 @@ public class LightLevelDisplayMod extends Mod {
         }
     }
 
-    @Override protected void onEnable() { }
-    @Override protected void onDisable() { }
-    @Override protected void onInit() { }
-    @Override protected void onCleanup() { }
 }

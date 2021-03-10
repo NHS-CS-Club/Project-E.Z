@@ -1,10 +1,7 @@
 package net.fabricmc.projectez;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.projectez.mods.FullBrightMod;
-import net.fabricmc.projectez.mods.LightLevelDisplayMod;
-import net.fabricmc.projectez.mods.Mod;
-import net.fabricmc.projectez.mods.PotionHUDMod;
+import net.fabricmc.projectez.mods.*;
 import net.fabricmc.projectez.util.ArrayListSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +23,7 @@ public class Main implements ModInitializer {
 		mods.add(new LightLevelDisplayMod());
 		mods.add(new PotionHUDMod());
 		mods.add(new FullBrightMod());
+		mods.add(new SimpleZoomMod());
 
 		for (Mod mod : mods) mod.init();
 		for (Mod mod : mods) mod.setEnabled(true);

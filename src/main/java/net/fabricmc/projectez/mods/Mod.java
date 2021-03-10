@@ -57,10 +57,10 @@ public abstract class Mod {
         onCleanup();
     }
 
-    protected abstract void onEnable();
-    protected abstract void onDisable();
-    protected abstract void onInit();
-    protected abstract void onCleanup();
+    protected void onEnable() { }
+    protected void onDisable() { }
+    protected void onInit() { }
+    protected void onCleanup() { }
 
     public final void callEvent(Event e, int priority) throws InvocationTargetException {
         for (EventMethod callback : eventCallbacks)

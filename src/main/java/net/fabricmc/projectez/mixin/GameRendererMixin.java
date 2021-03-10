@@ -1,7 +1,9 @@
 package net.fabricmc.projectez.mixin;
 
 import net.fabricmc.projectez.event.Event;
+import net.fabricmc.projectez.event.render.CalculateFovEvent;
 import net.fabricmc.projectez.event.render.LightmapUpdateEvent;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +23,22 @@ public class GameRendererMixin {
         ltm.update(delta);
         Event.call(new LightmapUpdateEvent(ltm));
         ((LightmapTextureAccessorMixin) ltm).getTex().upload();
+    }
+
+
+    @Redirect(
+            method = "getBasicProjectionMatrix(Lnet/minecraft/client/render/Camera;FZ)Lnet/minecraft/util/math/Matrix4f;",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/render/GameRenderer;getFov(Lnet/minecraft/client/render/Camera;FZ)D"
+            )
+    )
+    public double onCalculateFov(GameRenderer gr,Camera cam, float k, boolean z) {
+        double originalValue = ((GameRendererAccessorMixin)gr).getFov_(cam,k,z);
+        System.out.println(originalValue+" "+z);
+        CalculateFovEvent e = new CalculateFovEvent(originalValue);
+        Event.call(e);
+        return e.getValue();
     }
 }
 

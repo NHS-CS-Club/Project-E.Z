@@ -16,8 +16,4 @@ public class FullBrightMod extends Mod {
                 e.setLightColor(i,j,0xffffffff);
     }
 
-    @Override protected void onEnable() { }
-    @Override protected void onDisable() { }
-    @Override protected void onInit() { }
-    @Override protected void onCleanup() { }
 }

@@ -99,9 +99,4 @@ public class PotionHUDMod extends Mod {
         if (isPermanent) return String.format("[LVL %d] PERMANENT",strength+1);
         return String.format("[LVL %3$d] "+(minutes>0?"%1$d min, ":"")+"%2$d sec", minutes, seconds, strength+1);
     }
-
-    @Override protected void onEnable() { }
-    @Override protected void onDisable() { }
-    @Override protected void onInit() { }
-    @Override protected void onCleanup() { }
 }
