@@ -23,7 +23,7 @@ Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Clien
 - (More things in the future!)
 - Onscreen Coordinates and Location? (No F3) (Maby) (TODO)
 - Seed Cracker (Maby) (Not confirmed yet) (Idea)
-
+- Direct Discord Chat In Minecraft (Maby)
 - Toggalable Switch For Each Mod (TODO)
 
 
