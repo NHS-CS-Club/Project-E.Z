@@ -2,6 +2,7 @@ package net.fabricmc.projectez.mods;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.mixin.client.keybinding.KeyBindingAccessor;
+import net.fabricmc.projectez.Main;
 import net.fabricmc.projectez.event.EventHandler;
 import net.fabricmc.projectez.event.render.CalculateFovEvent;
 import net.minecraft.client.MinecraftClient;
@@ -34,7 +35,7 @@ public class SimpleZoomMod extends Mod {
     @Override
     protected void onInit() {
         KeyBindingAccessor.fabric_getCategoryMap().put("category",4);
-        ZOOM_KEY = new KeyBinding("a.translation.key",86,"category");
+        ZOOM_KEY = new KeyBinding("a.translation.key",86, Main.MOD_ID);
         KeyBindingHelper.registerKeyBinding(ZOOM_KEY);
     }
 }

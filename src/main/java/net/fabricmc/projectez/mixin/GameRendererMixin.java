@@ -35,7 +35,6 @@ public class GameRendererMixin {
     )
     public double onCalculateFov(GameRenderer gr,Camera cam, float k, boolean z) {
         double originalValue = ((GameRendererAccessorMixin)gr).getFov_(cam,k,z);
-        System.out.println(originalValue+" "+z);
         CalculateFovEvent e = new CalculateFovEvent(originalValue);
         Event.call(e);
         return e.getValue();

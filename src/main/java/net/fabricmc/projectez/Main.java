@@ -1,8 +1,12 @@
 package net.fabricmc.projectez;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.projectez.gui.SettingsGui;
 import net.fabricmc.projectez.mods.*;
 import net.fabricmc.projectez.util.ArrayListSet;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.options.KeyBinding;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +20,14 @@ public class Main implements ModInitializer {
 
 	public static final Set<Mod> mods = new ArrayListSet<>();
 
+	private static Main instance;
+	private static final KeyBinding MOD_SETTINGS_KEY = new KeyBinding("TRANSLATION KEY HERE",84,MOD_ID);
+
 	@Override
 	public void onInitialize() {
+		if (instance != null) throw new IllegalStateException("MOD "+MOD_ID+" AKA. '"+MOD_NAME+"' ALREADY INITIALIZED");
+		instance = this;
+
 		LOGGER.info("INIT "+MOD_NAME);
 
 		mods.add(new LightLevelDisplayMod());
@@ -27,5 +37,20 @@ public class Main implements ModInitializer {
 
 		for (Mod mod : mods) mod.init();
 		for (Mod mod : mods) mod.setEnabled(true);
+
+		KeyBindingHelper.registerKeyBinding(MOD_SETTINGS_KEY);
 	}
+
+	public static void onTick() {
+		MinecraftClient mc = MinecraftClient.getInstance();
+
+		if (mc.currentScreen == null && mc.world != null)
+			System.out.println("TICK");
+
+		if (mc.currentScreen == null && mc.world != null && MOD_SETTINGS_KEY.wasPressed()) {
+			System.out.println("PRESSED");
+			mc.openScreen(new SettingsGui());
+		}
+	}
+
 }
