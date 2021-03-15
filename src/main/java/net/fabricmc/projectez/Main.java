@@ -2,8 +2,10 @@ package net.fabricmc.projectez;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.projectez.gui.ModSettingsGui;
 import net.fabricmc.projectez.gui.SettingsGui;
 import net.fabricmc.projectez.mods.*;
+import net.fabricmc.projectez.mods.settings.ModSettings;
 import net.fabricmc.projectez.util.ArrayListSet;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
@@ -39,6 +41,11 @@ public class Main implements ModInitializer {
 		for (Mod mod : mods) mod.setEnabled(true);
 
 		KeyBindingHelper.registerKeyBinding(MOD_SETTINGS_KEY);
+
+		ModSettings ms = new ModSettings(0);
+		SettingsGui.addSettingGui("yeet",ms);
+		ms = new ModSettings(54);
+		SettingsGui.addSettingGui("rth",ms);
 	}
 
 	public static void onTick() {
