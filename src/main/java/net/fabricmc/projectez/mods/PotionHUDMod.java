@@ -29,7 +29,7 @@ public class PotionHUDMod extends Mod {
     private final MinecraftClient client;
 
     public PotionHUDMod() {
-        super("Potion Effects HUD");
+        super("projectez.potionHUD");
         client = MinecraftClient.getInstance();
         /*HudRenderCallback.EVENT.register((__, ___) -> {
             this.render();

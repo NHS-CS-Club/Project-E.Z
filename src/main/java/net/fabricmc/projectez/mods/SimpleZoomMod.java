@@ -5,6 +5,7 @@ import net.fabricmc.fabric.mixin.client.keybinding.KeyBindingAccessor;
 import net.fabricmc.projectez.Main;
 import net.fabricmc.projectez.event.EventHandler;
 import net.fabricmc.projectez.event.render.CalculateFovEvent;
+import net.fabricmc.projectez.mods.settings.ModSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 
@@ -13,7 +14,7 @@ public class SimpleZoomMod extends Mod {
     public static KeyBinding ZOOM_KEY;
 
     public SimpleZoomMod() {
-        super("simple zoom");
+        super("projectez.simpleZoom");
     }
 
     private boolean wasSmoothCamEnabled = false;
@@ -34,8 +35,7 @@ public class SimpleZoomMod extends Mod {
 
     @Override
     protected void onInit() {
-        KeyBindingAccessor.fabric_getCategoryMap().put("category",4);
-        ZOOM_KEY = new KeyBinding("a.translation.key",86, Main.MOD_ID);
-        KeyBindingHelper.registerKeyBinding(ZOOM_KEY);
+        settings.addKey("doZoom",new ModSettings.ModKeyBinding("projectez.simpleZoom.zoomKey",86));
+        ZOOM_KEY = settings.getKey("doZoom");
     }
 }

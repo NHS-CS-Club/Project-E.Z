@@ -2,7 +2,10 @@ package net.fabricmc.projectez.mods;
 
 import net.fabricmc.projectez.event.Event;
 import net.fabricmc.projectez.event.EventHandler;
+import net.fabricmc.projectez.gui.SettingsGui;
+import net.fabricmc.projectez.mods.settings.ModSettings;
 import net.fabricmc.projectez.util.ArrayListSet;
+import net.minecraft.text.Text;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,9 +23,17 @@ public abstract class Mod {
 
     private static final Set<Integer> priorityLevels = new ArrayListSet<>();
 
-    @SuppressWarnings("unchecked")
+    protected final ModSettings settings;
+
     public Mod(String name) {
+        this(name,0xdeadbeef);
+    }
+    @SuppressWarnings("unchecked")
+    public Mod(String name, int defaultToggleKey) {
         this.name = name;
+        if (defaultToggleKey != 0xdeadbeef)
+            settings = new ModSettings(this,defaultToggleKey);
+        else settings = new ModSettings(this);
 
         Method[] methods = getClass().getDeclaredMethods();
         List<EventMethod> eventMethods = new ArrayList<>();
@@ -42,12 +53,15 @@ public abstract class Mod {
         if (cleaned || !initialized) throw new IllegalStateException();
         if (this.enabled == enabled) return;
         this.enabled = enabled;
+        settings.getModEnabledParam().setValue(enabled);
         if (enabled) onEnable();
         else onDisable();
     }
+    public final boolean getEnabled() { return enabled; }
     public final void init() {
         if (cleaned || initialized) throw new IllegalStateException();
         initialized = true;
+        SettingsGui.addSettingGui(name, settings);
         onInit();
     }
     public final void cleanup() {
@@ -79,6 +93,8 @@ public abstract class Mod {
             out[i] = iterator.next();
         return out;
     }
+
+    public ModSettings getSettings() { return settings; }
 
     private static class EventMethod {
         private final Class<? extends Event> type;

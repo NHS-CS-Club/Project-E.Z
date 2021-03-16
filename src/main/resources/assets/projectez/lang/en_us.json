@@ -1,5 +1,19 @@
 {
-    "text.autoconfig.simplezoom.category.default" : "Default",
-    "text.autoconfig.simplezoom.option.smoothZoom" : "Smooth Zoom",
-    "text.autoconfig.simplezoom.option.zoomAmount" : "Zoom Amount"
+
+
+    "projectez.settings": "ProjectEZ Settings",
+    "projectez.settings.key": "ProjectEZ Settings",
+    "projectez.settings.modToggleKey": "Mod Toggle Key",
+    "projectez.settings.true": "True",
+    "projectez.settings.false": "False",
+    "projectez.settings.enabled": "Enabled",
+
+    "projectez.fullBright": "FullBright",
+
+    "projectez.lightmapMod": "LightLevels",
+
+    "projectez.potionHUD": "PotionHUD",
+
+    "projectez.simpleZoom": "Zoom",
+    "projectez.simpleZoom.zoomKey": "Zoom Key"
 }

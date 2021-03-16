@@ -6,7 +6,7 @@ import net.fabricmc.projectez.mods.Mod;
 
 public class FullBrightMod extends Mod {
     public FullBrightMod() {
-        super("FullBright");
+        super("projectez.fullBright",66);
     }
 
     @EventHandler()

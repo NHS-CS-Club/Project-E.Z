@@ -1,21 +1,22 @@
 package net.fabricmc.projectez.gui;
 
-import net.fabricmc.projectez.Main;
 import net.fabricmc.projectez.mods.settings.ModSettings;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class ModSettingsGui extends Screen {
-    public static final int X_OFFSET = 100;
+public class ModSettingsGui {
+    public static final int X_OFFSET = 110;
+    public static final int WIDTH = 300;
 
     public final ModSettings target;
     public final String name;
@@ -24,17 +25,32 @@ public class ModSettingsGui extends Screen {
 
     private double baseOff = 0;
 
-    public ModSettingsGui(String name, ModSettings target) {
-        super(new TranslatableText("translation.key.here"));
+    private KeyRow focusedKeyRow = null;
+
+    private final SettingsGui parent;
+
+    public ModSettingsGui(String name, ModSettings target, SettingsGui parent) {
         this.name = name;
         this.target = target;
+        this.parent = parent;
 
+        rows.add(new Row() {
+            @Override public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, int yOff) {
+                TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+                renderer.draw(matrices, new TranslatableText(ModSettingsGui.this.name), WIDTH/2f-renderer.getWidth(ModSettingsGui.this.name)/2f, getHeight() / 2f - renderer.fontHeight / 2f, 0xffffffff);
+            }
+            @Override public int getHeight() { return 20; }
+            @Override public void key(int key, int scanCode, int modifiers) { }
+            @Override public void click(double mouseX, double mouseY, int button) { }
+            @Override public void release(double mouseX, double mouseY, int button) { }
+            @Override public void drag(double mouseX, double mouseY, int button, double deltaX, double deltaY) { }
+        });
+        rows.add(new BoolRow(this.target.mod::setEnabled, target.getModEnabledParam()));
         rows.add(new KeyRow(target.getToggleKey()));
         for (String id : target.getAllKeys())
             rows.add(new KeyRow(id));
     }
 
-    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         matrices.push();
         int yOff = (int) baseOff;
@@ -47,47 +63,47 @@ public class ModSettingsGui extends Screen {
         matrices.pop();
     }
 
-    @Override
-    public boolean shouldCloseOnEsc() { return false; }
-
-    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
-
-    @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        int yOff = (int) baseOff;
-        for (Row row : rows) {
-            row.click(mouseX-X_OFFSET, mouseY-yOff, button);
-            yOff+=row.getHeight();
+        if (focusedKeyRow != null) {
+            if (keyCode==256) focusedKeyRow.update(InputUtil.UNKNOWN_KEY);
+            else              focusedKeyRow.update(InputUtil.Type.KEYSYM.createFromCode(keyCode));
+            return true;
         }
-        return false;
-    }
-    @Override public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        int yOff = (int) baseOff;
-        for (Row row : rows) {
-            row.release(mouseX-X_OFFSET, mouseY-yOff, button);
-            yOff+=row.getHeight();
-        }
-        return false;
-    }
-    @Override public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        int yOff = (int) baseOff;
-        for (Row row : rows) {
-            row.drag(mouseX-X_OFFSET, mouseY-yOff, button, deltaX, deltaY);
-            yOff+=row.getHeight();
-        }
+        for (Row row : rows) { row.key(keyCode,scanCode,modifiers); }
         return false;
     }
 
-    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (focusedKeyRow != null) {
+            focusedKeyRow.update(InputUtil.Type.MOUSE.createFromCode(button));
+            return true;
+        }
+        int yOff = (int) baseOff;
+        for (Row row : rows) { row.click(mouseX-X_OFFSET, mouseY-yOff, button); yOff += row.getHeight(); }
+        return false;
+    }
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        int yOff = (int) baseOff;
+        for (Row row : rows) { row.release(mouseX-X_OFFSET, mouseY-yOff, button); yOff += row.getHeight(); }
+        return false;
+    }
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        int yOff = (int) baseOff;
+        for (Row row : rows) { row.drag(mouseX-X_OFFSET, mouseY-yOff, button, deltaX, deltaY); yOff += row.getHeight(); }
+        return false;
+    }
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        baseOff += amount;
+        baseOff += amount*10;
+        int h = 0;
+        for (Row row : rows) h += row.getHeight();
+        baseOff = Math.max(parent.height - h, baseOff);
+        baseOff = Math.min(0, baseOff);
         return false;
     }
 
     private interface Row {
         int getHeight();
+        void key(int key, int scanCode, int modifiers);
         void render(MatrixStack matrices, int mouseX, int mouseY, float delta, int yOff);
         void click(double mouseX, double mouseY, int button);
         void release(double mouseX, double mouseY, int button);
@@ -97,39 +113,81 @@ public class ModSettingsGui extends Screen {
     private class KeyRow implements Row {
         public final String id;
         public final ModSettings.ModKeyBinding binding;
-
         public final AbstractButtonWidget button;
+        public final AbstractButtonWidget resetButton;
 
         private KeyRow(String id) { this(id, ModSettingsGui.this.target.getKey(id)); }
         private KeyRow(ModSettings.ModKeyBinding key) { this(null,key); }
         private KeyRow(String id, ModSettings.ModKeyBinding key) {
             this.id = id;
             binding = key;
-            button = new ButtonWidget(100,0,200,20, new TranslatableText(binding.getBoundKeyTranslationKey()), ButtonWidget->{
-                Main.LOGGER.info("test button text");
-                Main.LOGGER.info("YEET");
+
+            button = new ButtonWidget(100,0,76,20, binding.getBoundKeyLocalizedText(), b->{
+                focusedKeyRow = this;
+                b.setMessage((new LiteralText("> ")).append(b.getMessage().shallowCopy().formatted(Formatting.YELLOW)).append(" <").formatted(Formatting.YELLOW));
+            });
+            resetButton = new ButtonWidget(175,0,50,20,new TranslatableText("controls.reset"), b->{
+                binding.resetKey();
+                button.setMessage(binding.getBoundKeyLocalizedText());
             });
         }
 
-        @Override
-        public int getHeight() { return 20; }
+        @Override public int getHeight() { return 20; }
+        @Override public void click(double mouseX, double mouseY, int button) { this.button.mouseClicked(mouseX,mouseY,button); this.resetButton.mouseClicked(mouseX,mouseY,button); }
+        @Override public void release(double mouseX, double mouseY, int button) { this.button.mouseReleased(mouseX,mouseY,button); this.resetButton.mouseReleased(mouseX,mouseY,button); }
+        @Override public void drag(double mouseX, double mouseY, int button, double deltaX, double deltaY) { this.button.mouseDragged(mouseX,mouseY,button,deltaX,deltaY); this.resetButton.mouseDragged(mouseX,mouseY,button,deltaX,deltaY); }
+        @Override public void key(int key, int scanCode, int modifiers) { }
 
-
-        @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, int yOff) {
+        @Override public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, int yOff) {
+            TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+            float calcX = 10;
+            float calcY = (float)(getHeight() / 2 - renderer.fontHeight / 2);
+            renderer.draw(matrices, new TranslatableText(binding.getTranslationKey()), calcX, calcY, 0xffffffff);
             button.render(matrices, mouseX, mouseY-yOff, delta);
+            resetButton.render(matrices,mouseX, mouseY-yOff, delta);
         }
-        @Override
-        public void click(double mouseX, double mouseY, int button) {
-            this.button.mouseClicked(mouseX,mouseY,button);
+
+        public void update(InputUtil.Key keyCode) {
+            binding.setKey(keyCode);
+            button.setMessage(binding.getBoundKeyLocalizedText());
+            focusedKeyRow = null;
         }
-        @Override
-        public void release(double mouseX, double mouseY, int button) {
-            this.button.mouseReleased(mouseX,mouseY,button);
+    }
+    private class BoolRow implements Row {
+        public final ModSettings.K<Boolean> callback;
+        public final ModSettings.Parameter<Boolean> parameter;
+        public final AbstractButtonWidget button;
+        public final AbstractButtonWidget resetButton;
+
+        private BoolRow(ModSettings.K<Boolean> callback, ModSettings.Parameter<Boolean> parameter) {
+            this.callback = callback;
+            this.parameter = parameter;
+
+            button = new ButtonWidget(100,0,76,20, new TranslatableText(this.parameter.getValue()?"projectez.settings.true":"projectez.settings.false"), b->{
+                this.parameter.setValue(!this.parameter.getValue());
+                b.setMessage(new TranslatableText(this.parameter.getValue()?"projectez.settings.true":"projectez.settings.false"));
+                this.callback.run(this.parameter.getValue());
+            });
+            resetButton = new ButtonWidget(175,0,50,20,new TranslatableText("controls.reset"), b->{
+                this.parameter.resetValue();
+                button.setMessage(new TranslatableText(this.parameter.getValue()?"projectez.settings.true":"projectez.settings.false"));
+                this.callback.run(this.parameter.getValue());
+            });
         }
-        @Override
-        public void drag(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-            this.button.mouseDragged(mouseX,mouseY,button,deltaX,deltaY);
+
+        @Override public int getHeight() { return 20; }
+        @Override public void click(double mouseX, double mouseY, int button) { this.button.mouseClicked(mouseX,mouseY,button); this.resetButton.mouseClicked(mouseX,mouseY,button); }
+        @Override public void release(double mouseX, double mouseY, int button) { this.button.mouseReleased(mouseX,mouseY,button); this.resetButton.mouseReleased(mouseX,mouseY,button); }
+        @Override public void drag(double mouseX, double mouseY, int button, double deltaX, double deltaY) { this.button.mouseDragged(mouseX,mouseY,button,deltaX,deltaY); this.resetButton.mouseDragged(mouseX,mouseY,button,deltaX,deltaY); }
+        @Override public void key(int key, int scanCode, int modifiers) { }
+
+        @Override public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, int yOff) {
+            TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
+            float calcX = 10;
+            float calcY = (float)(getHeight() / 2 - 9 / 2);
+            renderer.draw(matrices, parameter.displayName, calcX, calcY, 0xffffffff);
+            button.render(matrices, mouseX, mouseY-yOff, delta);
+            resetButton.render(matrices,mouseX, mouseY-yOff, delta);
         }
     }
 }

@@ -23,7 +23,7 @@ public class Main implements ModInitializer {
 	public static final Set<Mod> mods = new ArrayListSet<>();
 
 	private static Main instance;
-	private static final KeyBinding MOD_SETTINGS_KEY = new KeyBinding("TRANSLATION KEY HERE",84,MOD_ID);
+	private static final KeyBinding MOD_SETTINGS_KEY = new KeyBinding("projectez.settings.key",78,MOD_ID);
 
 	@Override
 	public void onInitialize() {
@@ -41,22 +41,20 @@ public class Main implements ModInitializer {
 		for (Mod mod : mods) mod.setEnabled(true);
 
 		KeyBindingHelper.registerKeyBinding(MOD_SETTINGS_KEY);
-
-		ModSettings ms = new ModSettings(0);
-		SettingsGui.addSettingGui("yeet",ms);
-		ms = new ModSettings(54);
-		SettingsGui.addSettingGui("rth",ms);
 	}
 
 	public static void onTick() {
 		MinecraftClient mc = MinecraftClient.getInstance();
 
-		if (mc.currentScreen == null && mc.world != null)
-			System.out.println("TICK");
-
-		if (mc.currentScreen == null && mc.world != null && MOD_SETTINGS_KEY.wasPressed()) {
-			System.out.println("PRESSED");
+		if (mc.currentScreen == null && mc.world != null && MOD_SETTINGS_KEY.wasPressed())
 			mc.openScreen(new SettingsGui());
+
+		if (mc.currentScreen == null && mc.world != null) for (Mod mod : mods) {
+			LOGGER.info(mod.getSettings().getToggleKey().isPressed());
+			if (mod.getSettings().getToggleKey().wasPressed()) {
+				LOGGER.info(mod.name);
+				mod.setEnabled(!mod.getEnabled());
+			}
 		}
 	}
 

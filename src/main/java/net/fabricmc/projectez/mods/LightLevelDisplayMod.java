@@ -6,7 +6,7 @@ import net.fabricmc.projectez.event.render.LightmapUpdateEvent;
 public class LightLevelDisplayMod extends Mod {
 
     public LightLevelDisplayMod() {
-        super("LightmapMod");
+        super("projectez.lightmapMod");
     }
 
     @EventHandler()
