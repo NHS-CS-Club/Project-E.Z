@@ -8,7 +8,6 @@
   "client": [
     "GameRendererMixin",
     "InGameHudMixin",
-    "MinecraftClientMixin",
     "LightmapTextureAccessorMixin",
     "MinecraftClientAccessorMixin",
     "InGameHudAccessorMixin",

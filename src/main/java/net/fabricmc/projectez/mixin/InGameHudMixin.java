@@ -27,7 +27,7 @@ public class InGameHudMixin {
             )
     )
     public void renderEnd(MatrixStack matrixStack, float tickDelta, CallbackInfo info) {
-        Event.call(new InGameHudRenderEvent(matrixStack,tickDelta));
+        //Event.call(new InGameHudRenderEvent(matrixStack,tickDelta));
     }
 
     @Redirect(

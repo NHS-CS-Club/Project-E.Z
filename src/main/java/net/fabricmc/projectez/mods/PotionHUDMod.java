@@ -26,23 +26,20 @@ import java.util.concurrent.TimeUnit;
 
 @Environment(EnvType.CLIENT)
 public class PotionHUDMod extends Mod {
-    private final MinecraftClient client;
+    private final MinecraftClient mc;
 
     public PotionHUDMod() {
         super("projectez.potionHUD");
-        client = MinecraftClient.getInstance();
-        /*HudRenderCallback.EVENT.register((__, ___) -> {
-            this.render();
-        });*/
+        mc = MinecraftClient.getInstance();
     }
 
     @EventHandler
     public void render(PotionEffectHudRenderEvent e) {
         e.cancel();
 
-        final PlayerEntity player = client.player;
-        final InGameHud inGameHud = client.inGameHud;
-        final TextRenderer textRenderer = client.textRenderer;
+        final PlayerEntity player = mc.player;
+        final InGameHud inGameHud = mc.inGameHud;
+        final TextRenderer textRenderer = mc.textRenderer;
         final MatrixStack matrixStack = new MatrixStack();
 
 
@@ -55,7 +52,7 @@ public class PotionHUDMod extends Mod {
         if (!statusEffects.isEmpty() && !gameOptions.debugEnabled) {
             RenderSystem.enableBlend();
 
-            StatusEffectSpriteManager statusEffectSpriteManager = client.getStatusEffectSpriteManager();
+            StatusEffectSpriteManager statusEffectSpriteManager = mc.getStatusEffectSpriteManager();
             List<Runnable> statusEffectsRunnables = Lists.newArrayListWithExpectedSize(statusEffects.size());
 
             final int spriteSize = 18;
@@ -76,7 +73,7 @@ public class PotionHUDMod extends Mod {
                 Sprite sprite = statusEffectSpriteManager.getSprite(statusEffect);
 
                 statusEffectsRunnables.add(() -> {
-                    client.getTextureManager().bindTexture(sprite.getAtlas().getId());
+                    mc.getTextureManager().bindTexture(sprite.getAtlas().getId());
                     DrawableHelper.drawSprite(matrixStack, x, y, inGameHud.getZOffset(), 18, 18, sprite);
                     final float textYOffset = spriteSize / 2f - textRenderer.fontHeight / 2.5f;
                     int color;

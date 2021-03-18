@@ -3,6 +3,9 @@ package net.fabricmc.projectez;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.projectez.event.Event;
+import net.fabricmc.projectez.event.client.render.hud.InGameHudRenderEvent;
 import net.fabricmc.projectez.gui.SettingsGui;
 import net.fabricmc.projectez.mods.*;
 import net.fabricmc.projectez.mods.settings.ModSettings;
@@ -33,12 +36,13 @@ public class Main implements ModInitializer {
 		LOGGER.info("INIT "+MOD_NAME);
 
 		mods.add(new LightLevelDisplayMod());
+		mods.add(new ArmorHUDMod());
 		mods.add(new PotionHUDMod());
 		mods.add(new FullBrightMod());
 		mods.add(new SimpleZoomMod());
 
 		for (Mod mod : mods) mod.init();
-		for (Mod mod : mods) mod.setEnabled(true);
+		for (Mod mod : mods) mod.setEnabled(false);
 
 		KeyBindingHelper.registerKeyBinding(MOD_SETTINGS_KEY);
 
@@ -48,6 +52,7 @@ public class Main implements ModInitializer {
 	private void registerEvents() {
 		ClientTickEvents.START_CLIENT_TICK.register(this::onPreTick);
 		ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
+		HudRenderCallback.EVENT.register((matrixStack,tickDelta)-> Event.call(new InGameHudRenderEvent(matrixStack,tickDelta)));
 	}
 
 	protected void onPreTick(MinecraftClient mc) {
