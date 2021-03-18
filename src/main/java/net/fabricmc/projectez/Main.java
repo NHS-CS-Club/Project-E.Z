@@ -1,8 +1,8 @@
 package net.fabricmc.projectez;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.projectez.gui.ModSettingsGui;
 import net.fabricmc.projectez.gui.SettingsGui;
 import net.fabricmc.projectez.mods.*;
 import net.fabricmc.projectez.mods.settings.ModSettings;
@@ -41,20 +41,26 @@ public class Main implements ModInitializer {
 		for (Mod mod : mods) mod.setEnabled(true);
 
 		KeyBindingHelper.registerKeyBinding(MOD_SETTINGS_KEY);
+
+		registerEvents();
 	}
 
-	public static void onTick() {
-		MinecraftClient mc = MinecraftClient.getInstance();
+	private void registerEvents() {
+		ClientTickEvents.START_CLIENT_TICK.register(this::onPreTick);
+		ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
+	}
 
-		if (mc.currentScreen == null && mc.world != null && MOD_SETTINGS_KEY.wasPressed())
-			mc.openScreen(new SettingsGui());
+	protected void onPreTick(MinecraftClient mc) {
+		ModSettings.updateCustomKeybindings();
+	}
+	protected void onTick(MinecraftClient mc) {
+		if (mc.currentScreen == null && mc.world != null) {
+			if (MOD_SETTINGS_KEY.wasPressed())
+				mc.openScreen(new SettingsGui());
 
-		if (mc.currentScreen == null && mc.world != null) for (Mod mod : mods) {
-			LOGGER.info(mod.getSettings().getToggleKey().isPressed());
-			if (mod.getSettings().getToggleKey().wasPressed()) {
-				LOGGER.info(mod.name);
-				mod.setEnabled(!mod.getEnabled());
-			}
+			for (Mod mod : mods)
+				if (mod.getSettings().getToggleKey().wasPressed())
+					mod.setEnabled(!mod.getEnabled());
 		}
 	}
 

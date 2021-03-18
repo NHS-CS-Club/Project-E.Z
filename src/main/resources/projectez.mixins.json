@@ -12,7 +12,8 @@
     "LightmapTextureAccessorMixin",
     "MinecraftClientAccessorMixin",
     "InGameHudAccessorMixin",
-    "GameRendererAccessorMixin"
+    "GameRendererAccessorMixin",
+    "KeyBindingAccessorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

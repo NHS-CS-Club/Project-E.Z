@@ -75,6 +75,10 @@ public abstract class Mod {
     protected void onDisable() { }
     protected void onInit() { }
     protected void onCleanup() { }
+    protected void onTick(TickData e) { }
+    protected void onPreTick(TickData e) { }
+
+    public void tick(boolean isPreTick, TickData e) { if (isPreTick) onPreTick(e); else onTick(e); }
 
     public final void callEvent(Event e, int priority) throws InvocationTargetException {
         for (EventMethod callback : eventCallbacks)
@@ -108,5 +112,9 @@ public abstract class Mod {
         }
         private int priority() { return annotation.priority(); }
         private boolean runWhenDisabled() { return annotation.runWhenDisabled(); }
+    }
+
+    public static class TickData {
+
     }
 }
