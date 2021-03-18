@@ -87,7 +87,7 @@ public class ModSettings {
         public void resetValue() { value = defaultValue; }
     }
     @FunctionalInterface
-    public interface K<T> {
+    public interface RunnableLikeWithParam<T> {
         void run(T v);
     }
 }

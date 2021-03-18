@@ -154,12 +154,12 @@ public class ModSettingsGui {
         }
     }
     private class BoolRow implements Row {
-        public final ModSettings.K<Boolean> callback;
+        public final ModSettings.RunnableLikeWithParam<Boolean> callback;
         public final ModSettings.Parameter<Boolean> parameter;
         public final AbstractButtonWidget button;
         public final AbstractButtonWidget resetButton;
 
-        private BoolRow(ModSettings.K<Boolean> callback, ModSettings.Parameter<Boolean> parameter) {
+        private BoolRow(ModSettings.RunnableLikeWithParam<Boolean> callback, ModSettings.Parameter<Boolean> parameter) {
             this.callback = callback;
             this.parameter = parameter;
 

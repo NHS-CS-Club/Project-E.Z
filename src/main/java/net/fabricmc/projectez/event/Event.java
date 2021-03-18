@@ -6,10 +6,7 @@ import net.fabricmc.projectez.mods.Mod;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Event {
-    public final String name;
-    protected Event(String name) {
-        this.name = name;
-    }
+    protected Event() { }
 
     private boolean cancelled = false;
     public final void cancel() {

@@ -1,4 +1,4 @@
-package net.fabricmc.projectez.event.render;
+package net.fabricmc.projectez.event.client;
 
 import net.fabricmc.projectez.event.Event;
 import net.fabricmc.projectez.mixin.LightmapTextureAccessorMixin;
@@ -12,7 +12,6 @@ public class LightmapUpdateEvent extends Event {
     private final NativeImage img;
 
     public LightmapUpdateEvent(LightmapTextureManager ltm) {
-        super("Lightmap Texture Update");
         NativeImageBackedTexture tex = ((LightmapTextureAccessorMixin) ltm).getTex();
         img = tex.getImage();
     }

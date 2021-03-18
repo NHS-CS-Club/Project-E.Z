@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.projectez.event.EventHandler;
-import net.fabricmc.projectez.event.render.PotionEffectRenderEvent;
+import net.fabricmc.projectez.event.client.render.hud.PotionEffectHudRenderEvent;
 import net.fabricmc.projectez.mixin.MinecraftClientAccessorMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -37,7 +37,7 @@ public class PotionHUDMod extends Mod {
     }
 
     @EventHandler
-    public void render(PotionEffectRenderEvent e) {
+    public void render(PotionEffectHudRenderEvent e) {
         e.cancel();
 
         final PlayerEntity player = client.player;

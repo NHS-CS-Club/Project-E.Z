@@ -1,7 +1,7 @@
 package net.fabricmc.projectez.mods;
 
 import net.fabricmc.projectez.event.EventHandler;
-import net.fabricmc.projectez.event.render.CalculateFovEvent;
+import net.fabricmc.projectez.event.client.CalculateFovEvent;
 import net.fabricmc.projectez.mods.settings.ModSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;

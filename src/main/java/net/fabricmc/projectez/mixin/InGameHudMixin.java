@@ -3,8 +3,8 @@ package net.fabricmc.projectez.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.projectez.event.Event;
-import net.fabricmc.projectez.event.render.InGameHudRenderEvent;
-import net.fabricmc.projectez.event.render.PotionEffectRenderEvent;
+import net.fabricmc.projectez.event.client.render.hud.InGameHudRenderEvent;
+import net.fabricmc.projectez.event.client.render.hud.PotionEffectHudRenderEvent;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +38,7 @@ public class InGameHudMixin {
             )
     )
     public void renderStatusEffectHUD(InGameHud hud,MatrixStack matrixStack) {
-        Event e = new PotionEffectRenderEvent(matrixStack);
+        Event e = new PotionEffectHudRenderEvent(matrixStack);
         Event.call(e);
         if (!e.getCancelled())
             ((InGameHudAccessorMixin)hud).renderPotionsOverlay(matrixStack);

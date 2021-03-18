@@ -1,8 +1,8 @@
 package net.fabricmc.projectez.mixin;
 
 import net.fabricmc.projectez.event.Event;
-import net.fabricmc.projectez.event.render.CalculateFovEvent;
-import net.fabricmc.projectez.event.render.LightmapUpdateEvent;
+import net.fabricmc.projectez.event.client.CalculateFovEvent;
+import net.fabricmc.projectez.event.client.LightmapUpdateEvent;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
