@@ -4,10 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.projectez.event.EventHandler;
-import net.fabricmc.projectez.event.client.render.hud.PotionEffectHudRenderEvent;
+import net.fabricmc.projectez.event.client.render.hud.InGameHudRenderEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
@@ -22,20 +21,20 @@ import net.minecraft.util.math.Matrix4f;
 public class ArmorHUDMod extends Mod {
     private final MinecraftClient mc;
 
+    private TextRenderer textRenderer;
+    private ItemRenderer renderer;
+
     public ArmorHUDMod() {
         super("projectez.armorHUD");
         mc = MinecraftClient.getInstance();
+        textRenderer = mc.textRenderer;
+        renderer = mc.getItemRenderer();
     }
 
     @EventHandler
-    public void render(PotionEffectHudRenderEvent e) {
-        e.cancel();
-
+    public void render(InGameHudRenderEvent e) {
         final PlayerEntity player = mc.player;
-        final InGameHud inGameHud = mc.inGameHud;
-        final TextRenderer textRenderer = mc.textRenderer;
-        final MatrixStack matrixStack = new MatrixStack();
-
+        textRenderer = mc.textRenderer; renderer = mc.getItemRenderer();
 
         if (player == null) return;
 
@@ -43,26 +42,41 @@ public class ArmorHUDMod extends Mod {
     }
 
     private void renderStack(int x, int y, ItemStack stack) {
+        MatrixStack ms = new MatrixStack();
+
         if (stack.isEmpty()) return;
 
-        MatrixStack ms = new MatrixStack();
-        TextRenderer textRenderer = mc.textRenderer;
-        ItemRenderer renderer = mc.getItemRenderer();
-        renderer.renderInGui(stack,x,y);
-        textRenderer.draw(ms, Text.of(stack.getCount()+"x"),x+16,y,-1);
-
-        int fh=textRenderer.fontHeight, d=stack.getDamage(), c=stack.getCount(), s=16, dcw=40;
-        int xn=x+s, yn=y+fh, xp=xn+dcw, yp=yn+5, dw=((stack.getMaxDamage()-d)*(dcw-4))/stack.getMaxDamage();
-
-        if (stack.getMaxDamage() > 0) {
-            fillGradient(ms, xn, yn, xp, yn + 1, -1, -1);
-            fillGradient(ms,xn,yp-1,xp,yp,-1,-1);
-            fillGradient(ms, xn, yn, xn + 1, yp, -1, -1);
-            fillGradient(ms,xp-1,yn,xp,yp,-1,-1);
-            fillGradient(ms, xn + 2, yn + 2, xn + 2 + dw, yp - 2, -1, -1);
-        }
+        drawCount(x,y,stack);
+        if (stack.getMaxDamage() > 0) drawDurability(x,y,stack);
     }
 
+
+    private void drawCount(int x, int y, ItemStack stack) {
+        MatrixStack ms = new MatrixStack();
+        int c=stack.getCount(), s=16;
+
+        renderer.renderInGui(stack,x,y);
+
+        ms.translate(x,y,0);
+        Text countText = Text.of(c+"x");
+        textRenderer.draw(ms, countText,s+1,1,0xffffffff);
+    }
+    private void drawDurability(int x, int y, ItemStack stack) {
+        MatrixStack ms = new MatrixStack();
+        int fh=textRenderer.fontHeight, d=stack.getDamage(), dm=stack.getMaxDamage(), s=16, dcw=50;
+        int xn=x+s, yn=y+fh+2, xp=xn+dcw, yp=yn+6, dw=((dm-d)*(dcw-4))/dm;
+        Text durabilityText = Text.of((dm-d)+"/"+dm);
+
+        ms.push(); ms.translate(x,y,0); ms.scale(0.5f, 0.5f, 0.5f);
+        textRenderer.draw(ms, durabilityText, 2 * (s+dcw) - textRenderer.getWidth(durabilityText.asString()), textRenderer.fontHeight, 0x88ffffff);
+        ms.pop();
+
+        fillGradient(ms, xn, yn, xp, yn + 1, -1, -1);
+        fillGradient(ms, xn, yn, xn + 1, yp, -1, -1);
+        fillGradient(ms,xn,yp-1,xp,yp,-1,-1);
+        fillGradient(ms,xp-1,yn,xp,yp,-1,-1);
+        fillGradient(ms, xn + 2, yn + 2, xn + 2 + dw, yp - 2, -1, -1);
+    }
 
     protected void fillGradient(MatrixStack matrices, int xStart, int yStart, int xEnd, int yEnd, int colorStart, int colorEnd) {
         RenderSystem.disableTexture();
