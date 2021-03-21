@@ -32,7 +32,7 @@ public class SimpleZoomMod extends Mod {
 
     @Override
     protected void onInit() {
-        settings.addKey("doZoom",new ModSettings.ModKeyBinding("projectez.simpleZoom.zoomKey",86));
+        settings.addKey("doZoom",new ModSettings.ModKeyBinding("projectez.simpleZoom.zoomKey",90));
         ZOOM_KEY = settings.getKey("doZoom");
     }
 }
