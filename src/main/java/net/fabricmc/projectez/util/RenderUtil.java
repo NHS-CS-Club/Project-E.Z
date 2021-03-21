@@ -48,7 +48,7 @@ public class RenderUtil {
         ms.pop();
     }
     private static Text getHUDItemCountNameText(ItemStack stack) { return stack.getCount() > 1 ? Text.of("").shallowCopy().append(Text.of(stack.getCount()+" ").shallowCopy().formatted(Formatting.GRAY)).append(stack.getName()) : stack.getName(); }
-    private static Text getHUDItemDamageText(ItemStack stack) { return Text.of(stack.getDamage()+"/"+stack.getMaxDamage()); }
+    private static Text getHUDItemDamageText(ItemStack stack) { return Text.of((stack.getMaxDamage()-stack.getDamage())+"/"+stack.getMaxDamage()); }
     private static void drawHUDItemCount(MatrixStack ms, int x, int y, ItemStack stack) {
         ms.push();
         renderer.renderInGui(stack,x,y);
