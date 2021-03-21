@@ -19,6 +19,7 @@ public class ModSettings {
 
     protected final ModKeyBinding toggleKey;
     protected final Map<String,ModKeyBinding> keys = new HashMap<>();
+    protected final Map<String,Parameter<?>> parameters = new HashMap<>();
 
     private static final List<ModKeyBinding> customKeybindings = new ArrayList<>();
 
@@ -39,10 +40,13 @@ public class ModSettings {
 
     public ModKeyBinding getToggleKey() { return toggleKey; }
     public ModKeyBinding getKey(String id) { return keys.get(id); }
-    public void addKey(String id, ModKeyBinding key) {
-        keys.put(id, key);
-    }
+    public void addKey(String id, ModKeyBinding key) { keys.put(id, key); }
     public Set<String> getAllKeys() { return keys.keySet(); }
+
+    public Parameter<?> getParameter(String id) { return parameters.get(id); }
+    public Object getParameterValue(String id) { return parameters.get(id).value; }
+    public void addParameter(String id, Parameter<?> key) { parameters.put(id, key); }
+    public Set<String> getAllParameters() { return parameters.keySet(); }
 
     public static void updateCustomKeybindings() {
         for (ModKeyBinding keyBinding : customKeybindings)
@@ -76,10 +80,12 @@ public class ModSettings {
         public final T defaultValue;
         private T value;
         public final Text displayName;
+        public final Class<?> parameterType;
         public Parameter(String translationKey, T defaultValue) {
             this.displayName = new TranslatableText(translationKey);
             this.defaultValue = defaultValue;
             value = defaultValue;
+            parameterType = value.getClass();
         }
 
         public T getValue() { return value; }

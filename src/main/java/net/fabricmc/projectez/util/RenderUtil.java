@@ -8,12 +8,20 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Style;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.registry.Registry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RenderUtil {
 
@@ -29,17 +37,44 @@ public class RenderUtil {
         renderer = mc.getItemRenderer();
     }
 
-    public static void renderStack(MatrixStack matrixStack, int x, int y, ItemStack stack) {
-        fillRectGradient(matrixStack,x-1,y-1,x+1+ITEM_RENDER_HEIGHT+DURABILITY_WIDTH+30, y+2+ITEM_RENDER_HEIGHT,0x55000000,0x00000000, true);
+
+    public static int getHUDItemRenderHeight(ItemStack stack, boolean showEnchantList) {
+        int h = 2+ITEM_RENDER_HEIGHT, n = stack.getEnchantments().size();
+        if (n > 0 && showEnchantList) h += n*(textRenderer.fontHeight/2+1)+1;
+        return h;
+    }
+    public static void renderHUDItem(MatrixStack matrixStack, int x, int y, ItemStack stack, boolean showEnchantList) {
+        fillRectGradient(matrixStack,x-1,y-1,x+1+ITEM_RENDER_HEIGHT+DURABILITY_WIDTH+30, y-1+getHUDItemRenderHeight(stack,showEnchantList),0x55000000,0x00000000, true);
         if (stack.isEmpty())
             drawHUDItemEmpty(matrixStack,x,y);
-        else if (stack.getMaxDamage() == 0)
-            drawHUDItemCount(matrixStack,x,y,stack);
-        else
-            drawHUDItemCountDurability(matrixStack, x, y, stack);
+        else {
+            if (stack.getMaxDamage() == 0)
+                drawHUDItemCount(matrixStack, x, y, stack);
+            else
+                drawHUDItemCountDurability(matrixStack, x, y, stack);
+            if (showEnchantList)
+                drawHudItemEnchants(matrixStack, x, y, stack);
+        }
     }
 
-
+    private static void drawHudItemEnchants(MatrixStack ms, int x, int y, ItemStack stack) {
+        ms.push();
+        int yOff = ITEM_RENDER_HEIGHT+2;
+        final List<Text> tooltip = new ArrayList<>();
+        final ListTag enchantments = stack.getEnchantments();
+        for(int i = 0; i < enchantments.size(); ++i) {
+            CompoundTag compoundTag = enchantments.getCompound(i);
+            Registry.ENCHANTMENT.getOrEmpty(Identifier.tryParse(compoundTag.getString("id"))).ifPresent(e ->
+                tooltip.add(getEnchantmentName(e,compoundTag.getInt("lvl")))
+            );
+        }
+        ms.scale(0.5f,0.5f,0.5f);
+        for (Text row : tooltip) {
+            textRenderer.draw(ms,row,2*x+1,2*(y+yOff),-1);
+            yOff += textRenderer.fontHeight/2+1;
+        }
+        ms.pop();
+    }
     private static void drawHUDItemEmpty(MatrixStack ms, int x, int y) {
         ms.push();
         ms.translate(x,y,0);
@@ -76,13 +111,19 @@ public class RenderUtil {
         fillRect(ms, xn + 2, yn + 2, xn + 2 + dw, yp - 2, 0xaaffffff);
     }
 
+    public static Text getEnchantmentName(Enchantment enchantment, int level) {
+        MutableText txt = new TranslatableText(enchantment.getTranslationKey());
+        txt = txt.formatted(enchantment.isCursed()?Formatting.RED:Formatting.WHITE);
+        if (level != 1 || enchantment.getMaxLevel() != 1) txt = txt.append(Text.of(" "+level));
+        return txt;
+    }
+
     public static void strokeRect(MatrixStack matrices, float xn, float yn, float xp, float yp, int color, float strokeWidth) {
         fillRect(matrices,xn,yn,xp,yn+strokeWidth,color);
         fillRect(matrices,xn,yn+strokeWidth,xn+strokeWidth,yp-strokeWidth,color);
         fillRect(matrices,xn,yp-strokeWidth,xp,yp,color);
         fillRect(matrices,xp-strokeWidth,yn+strokeWidth,xp,yp-strokeWidth,color);
     }
-
     public static void fillRect(MatrixStack matrices, float xStart, float yStart, float xEnd, float yEnd, int color) {
         fillRectGradient(matrices, xStart, yStart, xEnd, yEnd, color, color, false);
     }

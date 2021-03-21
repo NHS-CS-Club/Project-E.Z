@@ -15,6 +15,7 @@
     "projectez.potionHUD": "PotionHUD",
 
     "projectez.armorHUD": "ArmorHUD",
+    "projectez.armorHUD.showEnchants": "Show Enchantments",
 
     "projectez.simpleZoom": "Zoom",
     "projectez.simpleZoom.zoomKey": "Zoom Key"

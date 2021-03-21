@@ -49,6 +49,11 @@ public class ModSettingsGui {
         rows.add(new KeyRow(target.getToggleKey()));
         for (String id : target.getAllKeys())
             rows.add(new KeyRow(id));
+        for (String id : target.getAllParameters()) {
+            ModSettings.Parameter<?> v = target.getParameter(id);
+            if (v.parameterType == Boolean.class) // noinspection unchecked
+                rows.add(new BoolRow(b->{},(ModSettings.Parameter<Boolean>) v));
+        }
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -122,11 +127,11 @@ public class ModSettingsGui {
             this.id = id;
             binding = key;
 
-            button = new ButtonWidget(100,0,76,20, binding.getBoundKeyLocalizedText(), b->{
+            button = new ButtonWidget(WIDTH-136,0,76,20, binding.getBoundKeyLocalizedText(), b->{
                 focusedKeyRow = this;
                 b.setMessage((new LiteralText("> ")).append(b.getMessage().shallowCopy().formatted(Formatting.YELLOW)).append(" <").formatted(Formatting.YELLOW));
             });
-            resetButton = new ButtonWidget(175,0,50,20,new TranslatableText("controls.reset"), b->{
+            resetButton = new ButtonWidget(WIDTH-60,0,50,20,new TranslatableText("controls.reset"), b->{
                 binding.resetKey();
                 button.setMessage(binding.getBoundKeyLocalizedText());
             });
@@ -163,12 +168,12 @@ public class ModSettingsGui {
             this.callback = callback;
             this.parameter = parameter;
 
-            button = new ButtonWidget(100,0,76,20, new TranslatableText(this.parameter.getValue()?"projectez.settings.true":"projectez.settings.false"), b->{
+            button = new ButtonWidget(WIDTH-136,0,76,20, new TranslatableText(this.parameter.getValue()?"projectez.settings.true":"projectez.settings.false"), b->{
                 this.parameter.setValue(!this.parameter.getValue());
                 b.setMessage(new TranslatableText(this.parameter.getValue()?"projectez.settings.true":"projectez.settings.false"));
                 this.callback.run(this.parameter.getValue());
             });
-            resetButton = new ButtonWidget(175,0,50,20,new TranslatableText("controls.reset"), b->{
+            resetButton = new ButtonWidget(WIDTH-60,0,50,20,new TranslatableText("controls.reset"), b->{
                 this.parameter.resetValue();
                 button.setMessage(new TranslatableText(this.parameter.getValue()?"projectez.settings.true":"projectez.settings.false"));
                 this.callback.run(this.parameter.getValue());
