@@ -1,20 +1,20 @@
 {
-  "projectez.settings": "da setting uv PwojectEEZEE",
-  "projectez.settings.key": "bed butun 4 PwojectEEZEE",
-  "projectez.settings.modToggleKey": "bed butun 4 Mawd",
-  "projectez.settings.true": "yee",
-  "projectez.settings.false": "idk no lol",
-  "projectez.settings.enabled": "EnAblEd",
+  "projectez.settings": "Settings",
+  "projectez.settings.key": "Toggle Keybind (ProjectEZ)",
+  "projectez.settings.modToggleKey": "Toggle Keybind (Mod)",
+  "projectez.settings.true": "Yes",
+  "projectez.settings.false": "No",
+  "projectez.settings.enabled": "Enabled",
 
-  "projectez.fullBright": "BRITE Mawd",
+  "projectez.fullBright": "Fullbright",
 
-  "projectez.lightmapMod": "worldcolormod",
+  "projectez.lightmapMod": "Lightup",
 
-  "projectez.potionHUD": "bufdrik SEer",
+  "projectez.potionHUD": "PotionHUD",
 
-  "projectez.armorHUD": "KatKovur SEer",
-  "projectez.armorHUD.showEnchants": "makitsho da shiny",
+  "projectez.armorHUD": "ArmorHUD",
+  "projectez.armorHUD.showEnchants": "Show Enchantments",
 
-  "projectez.simpleZoom": "seefar hax",
-  "projectez.simpleZoom.zoomKey": "square dat meks ZOOOM"
+  "projectez.simpleZoom": "Zoom",
+  "projectez.simpleZoom.zoomKey": "Zoom Keybind"
 }
