@@ -1,6 +1,6 @@
 # Project E.Z
 
-# **NOT YET DONE/RELEASED AND FINALIZED.**
+# **Currently Only Supports MC 1.16.5 (Must Use Fabric API For MC Version 1.16.5)**
 
 ## Setup
 
@@ -25,7 +25,3 @@ Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Clien
 - Seed Cracker (Maby) (Not confirmed yet) (Idea)
 - Direct Discord Chat In Minecraft (Maby)
 - Toggalable Switch For Each Mod (Done)
-
-
-
-Credit to Samuel Martineau for smippets of some of the code.
