@@ -1,9 +1,8 @@
 # Project E.Z
 
-# **Currently Only Supports MC 1.16.5 (Must Use Fabric API For MC Version 1.16.5)**
-
 ## Setup
 
+Currently Only Supports MC 1.16.5 (Must Use Fabric API For MC Version 1.16.5)
 For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
 
 ## License
