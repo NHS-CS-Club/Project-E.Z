@@ -16,7 +16,7 @@ Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Clien
 - Optifine Zoom (Done)
 - Full Bright (Done)
 - Potion Status HUD (Done)
-- Armor Status HUD (TODO)
+- Armor Status HUD (Done)
 - Shulker Box Peaker (TODO)
 - Auto Refill (TODO)
 - Block Light color (to light up big areas) (Done)
@@ -24,7 +24,7 @@ Its basiclly what the title says it is. An Ease of Life "Minecraft Mod" or Clien
 - Onscreen Coordinates and Location? (No F3) (Maby) (TODO)
 - Seed Cracker (Maby) (Not confirmed yet) (Idea)
 - Direct Discord Chat In Minecraft (Maby)
-- Toggalable Switch For Each Mod (DONE)
+- Toggalable Switch For Each Mod (Done)
 
 
 
